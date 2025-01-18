@@ -12,9 +12,8 @@ function makeCard(cardItem, removeElement) {
   cardImage.alt = cardItem.name;
   newCard.querySelector('.card__title').textContent = cardItem.name;
   
-  deleteButton.addEventListener('click', function (evt) {
-    const cardToBeDeleted = evt.target.closest('.card');
-    removeElement(cardToBeDeleted);
+  deleteButton.addEventListener('click', function () {
+    removeElement(newCard);
   }); 
 
   return newCard;
