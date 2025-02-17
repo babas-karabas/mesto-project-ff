@@ -1,41 +1,87 @@
+// импорты
 import './pages/index.css';
 
-const cardTemplate = document.querySelector('#card-template').content; 
+import { initialCards } from './scripts/cards';
+import { makeCard, removeCard, likeCard, viewImage } from './scripts/card';
+import { openModal, closeModal, attachEventListener } from './scripts/modal';
+
+
+// переменные 
 const placesList = document.querySelector('.places__list');
-const card = cardTemplate.querySelector('.card');
+const userName = document.querySelector('.profile__title');
+const userAbout = document.querySelector('.profile__description');
+ 
 
-function makeCard(cardItem, removeElement) {
+// кнопки
+const profileEditBtn = document.querySelector('.profile__edit-button');
+const profileAddBtn = document.querySelector('.profile__add-button');
 
-  const newCard = card.cloneNode(true);
-  const deleteButton = newCard.querySelector('.card__delete-button');
-  const cardImage = newCard.querySelector('.card__image');
+// попапы
+const popups = document.querySelectorAll('.popup');
+const profilePopup = document.querySelector('.popup_type_edit');
+const newCardPopup = document.querySelector('.popup_type_new-card');
+const imagePopup = document.querySelector('.popup_type_image');
 
-  cardImage.src = cardItem.link; 
-  cardImage.alt = cardItem.name;
-  newCard.querySelector('.card__title').textContent = cardItem.name;
-  
-  deleteButton.addEventListener('click', function () {
-    removeElement(newCard);
-  }); 
+// формы и инпуты
+const profileForm = document.forms['edit-profile'];
+const cardForm = document.forms['new-place'];
+const userNameInput = profileForm.elements.name;
+const userAboutInput = profileForm.elements.description;
+const cardUrlInput = cardForm.elements.link;
+const cardPlaceNameInput = cardForm.elements['place-name'];
 
-  return newCard;
+// объявление функций
+
+// функция редактирования профиля
+const handleProfileFormSubmit = (evt) => {
+  evt.preventDefault();
+  userName.textContent = userNameInput.value;
+  userAbout.textContent = userAboutInput.value;
+  closeModal(profilePopup);
 };
 
-function removeElement(elem) {
-  elem.remove();
+// функция добавления карточки через форму
+const handleCardFormSubmit = (evt) => {
+  evt.preventDefault();
+  placesList.prepend(makeCard({name: cardPlaceNameInput.value, link: cardUrlInput.value}, removeCard, likeCard, viewImage));
+  closeModal(newCardPopup);
 };
 
-
-const cards = initialCards.map(elem => {
-  return makeCard(elem, removeElement);
+// добавляем карточки на страницу из массива при обновлении страницы
+initialCards.forEach(elem => {
+  placesList.append(makeCard(elem, removeCard, likeCard, viewImage))
 });
 
-cards.forEach(elem => {
-  placesList.append(elem);
+// навешиваем слушатели для открытия попапов
+
+profileEditBtn.addEventListener('click', (evt) => {
+  openModal(profilePopup);
+  userNameInput.placeholder = userName.textContent;
+  userAboutInput.placeholder = userAbout.textContent;
+  });
+
+profileAddBtn.addEventListener('click', (evt) => {
+  openModal(newCardPopup);
+  });
+
+placesList.addEventListener('click', (evt) => {
+  if (evt.target.classList.contains('card__image')) {
+    openModal(imagePopup);
+    viewImage(evt.target)
+  }
 });
 
+//навешиваем слушатели для закрытия попапов и добавляем плавность
+popups.forEach(elem => {
+  attachEventListener(elem);
+  elem.classList.add('popup_is-animated');
+});
 
+// редактирование профиля
+profileForm.addEventListener('submit', handleProfileFormSubmit);
 
+// добавление новой карточки через форму
+cardForm.addEventListener('submit', handleCardFormSubmit);
 
 
 
