@@ -13,15 +13,11 @@ export const openModal = (modal) => {
 export const closeModal = (modal) => {
   modal.classList.remove('popup_is-opened');
   document.removeEventListener('keydown', handleEscKeyUp);
-  const popupForm = modal.querySelector('.popup__form');
-    if (popupForm) {
-      popupForm.reset();
-    }
 };
 
 export const attachEventListener = (modal) => {
-  const closeButton = modal.querySelector('.popup__close');
-  closeButton.addEventListener('click', (evt) => {
+  const closeBtn = modal.querySelector('.popup__close');
+  closeBtn.addEventListener('click', (evt) => {
     closeModal(modal);
   });
 
