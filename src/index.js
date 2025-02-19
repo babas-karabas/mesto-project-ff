@@ -73,11 +73,7 @@ initialCards.forEach(elem => {
 // навешиваем слушатели для открытия попапов
 profileEditBtn.addEventListener('click', (evt) => {
   openModal(profilePopup);
-  
-  // при открытии формы поля «Имя» и «О себе» должны быть заполнены теми значениями, которые отображаются на странице
-  userNameInput.placeholder = userName.textContent;
-  userAboutInput.placeholder = userAbout.textContent;
-  });
+});
 
 profileAddBtn.addEventListener('click', (evt) => {
   openModal(newCardPopup);
