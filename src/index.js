@@ -72,6 +72,8 @@ initialCards.forEach(elem => {
 
 // навешиваем слушатели для открытия попапов
 profileEditBtn.addEventListener('click', (evt) => {
+  userNameInput.value = userName.textContent;
+  userAboutInput.value = userAbout.textContent;
   openModal(profilePopup);
 });
 
