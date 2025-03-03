@@ -48,7 +48,7 @@ const renderProfileText = (data) => {
   userAbout.textContent = data.about;
 }
 // функция отрисовки аватара профиля
-const renderAvatar = (data) => {
+const renderAvatar = data => {
   userAvatar.style = `background-image: url(${data.avatar});`;
 }
 
@@ -57,6 +57,12 @@ const renderProfile = (data) => {
   renderProfileText(data);
   renderAvatar(data);  
 }
+
+// функция добавления карточки в начало списка
+const addСardToTop = () => {
+  
+}
+
 // функция отрисовки страницы
 const renderPage = () => {
   renderLoading(loader, true);

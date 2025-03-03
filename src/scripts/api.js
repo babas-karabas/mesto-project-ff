@@ -11,9 +11,9 @@ export const renderLoading = (loaderElement, isLoading, ) => {
   } else {
     loaderElement.classList.remove('loader_is-visible');
   }
-}
+};
 
-export const sendRequestToServer = (PATH, dataUri, myToken, method, data) => {
+const sendRequestToServer = (PATH, dataUri, myToken, method, data) => {
   return fetch(`${PATH}${dataUri}`, {
     method: method,
     body: JSON.stringify(data),
@@ -28,70 +28,20 @@ export const sendRequestToServer = (PATH, dataUri, myToken, method, data) => {
     } 
     return Promise.reject(res.status);
     })
-}
-
+};
 
 export const getFromServer = (PATH, dataUri, myToken) => {
-  return fetch(`${PATH}${dataUri}`, {
-  headers: {
-    authorization: myToken
-  }
-})
-  .then(res => {
-    if (res.ok) {
-      return res.json();
-    } 
-    return Promise.reject(res.status);
-    })
-}
+  return sendRequestToServer(PATH, dataUri, myToken, 'GET');
+};
 
 export const postToServer = (PATH, dataUri, myToken, data) => {
-  return fetch(`${PATH}${dataUri}`, {
-    method: 'POST',
-    body: JSON.stringify(data),
-    headers: {
-    authorization: myToken,
-    'content-type': 'application/json; charset=UTF-8'
-  }
-})
-  .then(res => {
-    if (res.ok) {
-      return res.json();
-    } 
-    return Promise.reject(res.status);
-    })
-}
+  return sendRequestToServer(PATH, dataUri, myToken, 'POST', data);
+};
 
 export const patchToServer = (PATH, dataUri, myToken, data) => {
-  return fetch(`${PATH}${dataUri}`, {
-    method: 'PATCH',
-    body: JSON.stringify(data),
-    headers: {
-      authorization: myToken,
-      'content-type': 'application/json; charset=UTF-8'
-    }
-})
-  .then(res => {
-    if (res.ok) {
-      return res.json();
-    } 
-    return Promise.reject(res.status);
-    })
-}
+  return sendRequestToServer(PATH, dataUri, myToken, 'PATCH', data);
+};
 
-export const deleteFromServer = (PATH, dataUri, myToken, data) => {
-  return fetch(`${PATH}${dataUri}`, {
-    method: 'DELETE',
-    headers: {
-      authorization: myToken,
-      'content-type': 'application/json; charset=UTF-8'
-    }
-})
-  .then(res => {
-    if (res.ok) {
-      return res.json();
-    } 
-    return Promise.reject(res.status);
-    })
-}
-
+export const deleteFromServer = (PATH, dataUri, myToken) => {
+    return sendRequestToServer(PATH, dataUri, myToken, 'DELETE');
+};
