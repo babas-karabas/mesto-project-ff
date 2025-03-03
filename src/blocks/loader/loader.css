@@ -1,0 +1,5 @@
+@import url('./__content/loader__content.css');
+
+.loader {
+  display: none;
+}
