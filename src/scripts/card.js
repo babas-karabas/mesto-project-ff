@@ -1,15 +1,16 @@
+
 export const makeCard = (cardData, onDeleteCard, onLikeCard, onOpenImagePopup, myId) => {
   const newCard = document.querySelector('#card-template').content.querySelector('.card').cloneNode(true);
   const deleteBtn = newCard.querySelector('.card__delete-button');
   const cardImage = newCard.querySelector('.card__image');
-  const likeBtn = newCard.querySelector('.card__like-button');
   const cardTitle = newCard.querySelector('.card__title');
   const likeCounter = newCard.querySelector('.card__like-counter');
+  const likeBtn = newCard.querySelector('.card__like-button');
 
   cardImage.src = cardData.link; 
   cardImage.alt = cardData.name;
   cardTitle.textContent = cardData.name;
-  likeCounter.textContent = cardData.likes.length;
+  changeLikeCount(likeCounter, cardData);
   
   if (cardData.owner._id === myId) {
     deleteBtn.addEventListener('click', () => onDeleteCard(cardData, newCard));
@@ -17,15 +18,50 @@ export const makeCard = (cardData, onDeleteCard, onLikeCard, onOpenImagePopup, m
     removeElement(deleteBtn);
   }
 
-  likeBtn.addEventListener('click', () => onLikeCard(likeBtn)); 
+  if (cardData.likes.some(like => like._id === myId)) {
+    likeBtn.classList.add('card__like-button_is-active');
+  }
+
+  likeBtn.addEventListener('click', (evt) => {
+    togglelikeBtn(likeBtn);
+    const isLiked = likeBtn.classList.contains('card__like-button_is-active');
+
+    onLikeCard(cardData, isLiked)
+    .then(data => {
+      changeLikeCount(likeCounter, data);
+    })
+    .catch(err => togglelikeBtn(likeBtn))
+    });
 
   cardImage.addEventListener('click', () => onOpenImagePopup(cardData));
 
   return newCard;
 };
 
+// функция удаления элемента
 export const removeElement = (elem) => elem.remove();
 
-export const likeCard = (elem) => elem.classList.toggle('card__like-button_is-active');
+// функция изменения оформления кнопки лайка
+const togglelikeBtn = (likeBtn) => {
+  likeBtn.classList.toggle('card__like-button_is-active');
+};
+
+// функция изменения счетчика лайков
+const changeLikeCount = (counterElement, cardData) => {
+  counterElement.textContent = cardData.likes.length;
+
+}
+// функция отправки лайка/дизлайка
+export const handleLikeClick = (likeApi, dislikeApi) => (cardData, isLiked) => { 
+
+  if (isLiked) {
+    return likeApi(cardData._id)
+  } else {
+    return dislikeApi(cardData._id)
+  }
+}
+
+
+
 
 

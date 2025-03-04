@@ -5,7 +5,7 @@ export const renderError = (errorElement, err) => {
   errorElement.textContent = err;
 };
 
-export const renderLoading = (loaderElement, isLoading, ) => {
+export const renderLoading = (loaderElement, isLoading) => {
   if (isLoading) {
     loaderElement.classList.add('loader_is-visible');
   } else {
@@ -43,5 +43,17 @@ export const patchToServer = (PATH, dataUri, myToken, data) => {
 };
 
 export const deleteFromServer = (PATH, dataUri, myToken) => {
-    return sendRequestToServer(PATH, dataUri, myToken, 'DELETE');
+  return sendRequestToServer(PATH, dataUri, myToken, 'DELETE');
 };
+
+export const putToServer = (PATH, dataUri, myToken) => {
+  return sendRequestToServer(PATH, dataUri, myToken, 'PUT');
+}
+
+export const likeApi = (cardId) => {
+  return putToServer(PATH, `cards/likes/${cardId}`, myToken);
+}
+
+export const dislikeApi = (cardId) => {
+  return deleteFromServer(PATH, `cards/likes/${cardId}`, myToken);
+}

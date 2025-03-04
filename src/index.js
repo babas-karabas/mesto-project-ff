@@ -1,8 +1,8 @@
 // импорты
 import './pages/index.css';
 
-import { getFromServer, PATH, myToken, renderError, renderLoading, patchToServer, postToServer, deleteFromServer } from './scripts/api.js';
-import { makeCard, removeElement, likeCard } from './scripts/card';
+import { getFromServer, PATH, myToken, renderError, renderLoading, patchToServer, postToServer, deleteFromServer, putToServer, dislikeApi, likeApi } from './scripts/api.js';
+import { makeCard, removeElement, handleLikeClick } from './scripts/card';
 import { openModal, closeModal, attachEventListener } from './scripts/modal';
 
 
@@ -47,8 +47,9 @@ const renderProfileText = (data) => {
   userName.textContent = data.name;
   userAbout.textContent = data.about;
 }
+
 // функция отрисовки аватара профиля
-const renderAvatar = data => {
+const renderAvatar = (data) => {
   userAvatar.style = `background-image: url(${data.avatar});`;
 }
 
@@ -59,8 +60,13 @@ const renderProfile = (data) => {
 }
 
 // функция добавления карточки в начало списка
-const addСardToTop = () => {
-  
+const addСardToTop = (card, container) => {
+  container.prepend(card);
+}
+
+// функция добавления карточки в конец списка
+const addСardToEnd = (card, container) => {
+  container.append(card);
 }
 
 // функция отрисовки страницы
@@ -70,7 +76,7 @@ const renderPage = () => {
   Promise.all([getFromServer(PATH, 'cards', myToken), getFromServer(PATH, 'users/me', myToken)])
     .then(([cardsData, userData]) => {
        contentLoadingError.textContent = '';
-       cardsData.forEach(cardData => placesList.append(makeCard(cardData, removeCard, likeCard, openImagePopup, userData._id)));
+       cardsData.forEach(cardData => addСardToEnd(makeCard(cardData, removeCard, handleLikeClick(likeApi, dislikeApi), openImagePopup, userData._id), placesList));
        renderProfile(userData);
     })
     .catch(err => {
@@ -102,7 +108,7 @@ const addCard = (evt) => {
   postToServer(PATH, 'cards', myToken, {name: cardPlaceNameInput.value, link: cardUrlInput.value})
   .then(data => {
     contentLoadingError.textContent = '';
-    placesList.prepend(makeCard(data, removeCard, likeCard, openImagePopup, data.owner._id));
+    addСardToTop(makeCard(data, removeCard, handleLikeClick(likeApi, dislikeApi), openImagePopup, data.owner._id), placesList);
   })
   .catch(err => {
     renderError(contentLoadingError, `Ошибка: ${err}`);
@@ -112,15 +118,17 @@ const addCard = (evt) => {
 };
 
 // функция удаления карточки
-const removeCard = (cardData, card) => {
+const removeCard = (cardData, cardElement) => {
   deleteFromServer(PATH, `cards/${cardData._id}`, myToken)
   .then(() => {
-    removeElement(card);
+    removeElement(cardElement);
   })
   .catch(err => {
     renderError(contentLoadingError, `Ошибка: ${err}`);
   })
 }
+
+
 
 // функция увеличения картинки при клике на нее
 const openImagePopup = (cardData) => {
@@ -133,12 +141,14 @@ const openImagePopup = (cardData) => {
 // слушатели
 
 // навешиваем слушатели для открытия попапов
+// слушатель для открытия формы редактирования текста профиля
 profileEditBtn.addEventListener('click', (evt) => {
   userNameInput.value = userName.textContent;
   userAboutInput.value = userAbout.textContent;
   openModal(profilePopup);
 });
 
+//слушатель для открытия формы добавления новой картинки
 profileAddBtn.addEventListener('click', (evt) => openModal(newCardPopup));
 
 // навешиваем слушатели для закрытия попапов и добавляем плавность при открытии/закрытии
@@ -147,16 +157,17 @@ document.querySelectorAll('.popup').forEach(elem => {
   elem.classList.add('popup_is-animated');
 });
 
-// навешиваем слушатель для редактирования профиля
+// навешиваем слушатель для подтверждения нового текста профиля
 profileForm.addEventListener('submit', editProfile);
 
-// навешиваем слушатель для добавления новой карточки через форму
+// навешиваем слушатель для подтверждения добавления новой карточки через форму
 cardForm.addEventListener('submit', addCard);
 
 // события 
 
 // загружаем с сервера и отрисовываем карточки при обновлении страницы
 renderPage();
+
 
 
 
