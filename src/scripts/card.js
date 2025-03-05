@@ -30,7 +30,7 @@ export const makeCard = (cardData, onDeleteCard, onLikeCard, onOpenImagePopup, m
     .then(data => {
       changeLikeCount(likeCounter, data);
     })
-    .catch(err => togglelikeBtn(likeBtn))
+    .catch(() => togglelikeBtn(likeBtn))
     });
 
   cardImage.addEventListener('click', () => onOpenImagePopup(cardData));
@@ -51,15 +51,27 @@ const changeLikeCount = (counterElement, cardData) => {
   counterElement.textContent = cardData.likes.length;
 
 }
-// функция отправки лайка/дизлайка
-export const handleLikeClick = (likeApi, dislikeApi) => (cardData, isLiked) => { 
+// функция отправки лайка/дизлайка на сервер
+export const handleLikeClick = (onLikeApi, onDislikeApi) => (cardData, isLiked) => { 
 
   if (isLiked) {
-    return likeApi(cardData._id)
+    return onLikeApi(cardData._id)
   } else {
-    return dislikeApi(cardData._id)
+    return onDislikeApi(cardData._id)
   }
 }
+
+// функция удаления карточки c сервера
+export const removeCard = (onDeleteApi, onRenderError, contentLoadingError) => (cardData, cardElement) => {
+  onDeleteApi(`cards/${cardData._id}`)
+  .then(() => {
+    removeElement(cardElement);
+  })
+  .catch(err => {
+    onRenderError(contentLoadingError, `Ошибка: ${err}`);
+  })
+}
+
 
 
 

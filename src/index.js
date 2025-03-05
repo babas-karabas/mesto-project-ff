@@ -1,43 +1,13 @@
 // импорты
 import './pages/index.css';
 
-import { getFromServer, PATH, myToken, renderError, renderLoading, patchToServer, postToServer, deleteFromServer, putToServer, dislikeApi, likeApi } from './scripts/api.js';
-import { makeCard, removeElement, handleLikeClick } from './scripts/card';
+import { placesList, popupCaption, popupImage, userName, userAbout, userAvatar, loader, contentLoadingError, 
+  profileAddBtn, profileEditBtn, imagePopup, newCardPopup, profilePopup, profileForm, cardForm,
+  userNameInput, userAboutInput, cardUrlInput, cardPlaceNameInput } from './scripts/constants';
+import { getFromServer, patchToServer, postToServer, deleteFromServer, putToServer, dislikeApi, likeApi } from './scripts/api.js';
+import { makeCard, removeElement, handleLikeClick, removeCard } from './scripts/card';
 import { openModal, closeModal, attachEventListener } from './scripts/modal';
-
-
-// переменные 
-
-// элементы
-const placesList = document.querySelector('.places__list');
-const popupCaption = document.querySelector('.popup__caption');
-const popupImage = document.querySelector('.popup__image');
-
-const userName = document.querySelector('.profile__title');
-const userAbout = document.querySelector('.profile__description');
-const userAvatar = document.querySelector('.profile__image');
-
-const loader = document.querySelector('.loader');
-const contentLoadingError = document.querySelector('.error');
-
-// кнопки
-const profileAddBtn = document.querySelector('.profile__add-button');
-const profileEditBtn = document.querySelector('.profile__edit-button');
-
-// попапы
-const imagePopup = document.querySelector('.popup_type_image');
-const newCardPopup = document.querySelector('.popup_type_new-card');
-const profilePopup = document.querySelector('.popup_type_edit');
-
-// формы и инпуты
-const profileForm = document.forms['edit-profile'];
-const cardForm = document.forms['new-place'];
-
-const userNameInput = profileForm.elements.name;
-const userAboutInput = profileForm.elements.description;
-
-const cardUrlInput = cardForm.elements.link;
-const cardPlaceNameInput = cardForm.elements['place-name'];
+import { renderError, renderLoading } from './scripts/utilits';
 
 
 // объявление функций
@@ -73,10 +43,10 @@ const addСardToEnd = (card, container) => {
 const renderPage = () => {
   renderLoading(loader, true);
   renderProfile({});
-  Promise.all([getFromServer(PATH, 'cards', myToken), getFromServer(PATH, 'users/me', myToken)])
+  Promise.all([getFromServer('cards'), getFromServer('users/me')])
     .then(([cardsData, userData]) => {
        contentLoadingError.textContent = '';
-       cardsData.forEach(cardData => addСardToEnd(makeCard(cardData, removeCard, handleLikeClick(likeApi, dislikeApi), openImagePopup, userData._id), placesList));
+       cardsData.forEach(cardData => addСardToEnd(makeCard(cardData, removeCard(deleteFromServer, renderError, contentLoadingError), handleLikeClick(likeApi, dislikeApi), openImagePopup, userData._id), placesList));
        renderProfile(userData);
     })
     .catch(err => {
@@ -91,7 +61,7 @@ const renderPage = () => {
 // функция редактирования профиля
 const editProfile = (evt) => {
   evt.preventDefault();
-  patchToServer(PATH, 'users/me', myToken, {name: userNameInput.value, about: userAboutInput.value})
+  patchToServer('users/me', {name: userNameInput.value, about: userAboutInput.value})
   .then(data => {
     contentLoadingError.textContent = '';
     renderProfileText(data);
@@ -105,10 +75,10 @@ const editProfile = (evt) => {
 // функция добавления карточки через форму
 const addCard = (evt) => {
   evt.preventDefault();
-  postToServer(PATH, 'cards', myToken, {name: cardPlaceNameInput.value, link: cardUrlInput.value})
+  postToServer('cards', {name: cardPlaceNameInput.value, link: cardUrlInput.value})
   .then(data => {
     contentLoadingError.textContent = '';
-    addСardToTop(makeCard(data, removeCard, handleLikeClick(likeApi, dislikeApi), openImagePopup, data.owner._id), placesList);
+    addСardToTop(makeCard(data, removeCard(deleteFromServer, renderError, contentLoadingError), handleLikeClick(likeApi, dislikeApi), openImagePopup, data.owner._id), placesList);
   })
   .catch(err => {
     renderError(contentLoadingError, `Ошибка: ${err}`);
@@ -116,18 +86,6 @@ const addCard = (evt) => {
   evt.target.reset();
   closeModal(newCardPopup);
 };
-
-// функция удаления карточки
-const removeCard = (cardData, cardElement) => {
-  deleteFromServer(PATH, `cards/${cardData._id}`, myToken)
-  .then(() => {
-    removeElement(cardElement);
-  })
-  .catch(err => {
-    renderError(contentLoadingError, `Ошибка: ${err}`);
-  })
-}
-
 
 
 // функция увеличения картинки при клике на нее
