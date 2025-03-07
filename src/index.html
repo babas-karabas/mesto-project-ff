@@ -14,7 +14,9 @@
   </header>
   <main class="content">
     <section class="profile page__section">
-      <div class="profile__image" style="background-image: url('<%=require('./images/avatar.jpg')%>');"></div>
+      <div class="profile__image" style="background-image: url('<%=require('./images/avatar.jpg')%>');">
+        <button class="profile__image-button" type="button"></button>
+      </div>
       <div class="profile__info">
         <h1 class="profile__title">Жак-Ив Кусто</h1>
         <button class="profile__edit-button" type="button"></button>
@@ -39,7 +41,17 @@
       <form class="popup__form" name="edit-profile">
         <input type="text" name="name" class="popup__input popup__input_type_name" placeholder="Имя" value="" required minlength="2" maxlength="40">
         <input type="text" name="description" class="popup__input popup__input_type_description" placeholder="Занятие" value="" required minlength="2" maxlength="200">
-        <button type="submit" class="button popup__button">Сохранить</button>
+        <button type="submit" class="button popup__button" data-bydefault-text="Сохранить">Сохранить</button>
+      </form>
+    </div>
+  </div>
+  <div class="popup popup_type_avatar">
+    <div class="popup__content">
+      <button type="button" class="popup__close"></button>
+      <h3 class="popup__title">Обновить аватар</h3>
+      <form class="popup__form" name="edit-avatar">
+        <input type="url" name="link" class="popup__input popup__input_type_url" placeholder="Ссылка на картинку" required>
+        <button type="submit" class="button popup__button" data-bydefault-text="Сохранить">Сохранить</button>
       </form>
     </div>
   </div>
@@ -50,7 +62,7 @@
       <form class="popup__form" name="new-place">
         <input type="text" name="place-name" class="popup__input popup__input_type_card-name" placeholder="Название" required minlength="2" maxlength="30">
         <input type="url" name="link" class="popup__input popup__input_type_url" placeholder="Ссылка на картинку" required>
-        <button type="submit" class="button popup__button">Сохранить</button>
+        <button type="submit" class="button popup__button" data-bydefault-text="Создать">Создать</button>
       </form>
     </div>
   </div>
@@ -62,8 +74,8 @@
     </div>
   </div>
   <p class="error"></p>
-  <div class="loader">
-    <span class="loader__content"></span>
+  <div class="spinner">
+    <span class="spinner__content"></span>
   </div>
 </div>
 

@@ -1,0 +1,29 @@
+.profile__image-button {
+  width: 26px;
+  height: 26px;
+  background: transparent url('../../../images/edit-image.svg') center no-repeat;
+  opacity: 0%;
+  cursor: pointer;
+  border-color: transparent;
+  padding: 0;
+  margin: auto;
+  position: relative;
+  z-index: 4;
+  transition: opacity 0.4s ease;
+}
+
+@media screen and (max-width: 740px) {
+  .profile__image-button {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .profile__image-button {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+

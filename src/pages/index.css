@@ -10,7 +10,7 @@
 @import url('../blocks/popup/popup.css');
 @import url('../blocks/popup/_is-animated/popup_is-animated.css');
 @import url('../blocks/popup/_is-opened/popup_is-opened.css');
-@import url('../blocks/loader/loader.css');
-@import url('../blocks/loader/_is-visible/loader_is-visible.css');
+@import url('../blocks/spinner/spinner.css');
+@import url('../blocks/spinner/_is-visible/spinner_is-visible.css');
 @import url('../blocks/error/error.css');
 

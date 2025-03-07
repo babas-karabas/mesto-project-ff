@@ -5,17 +5,21 @@ export {
   userName, 
   userAbout, 
   userAvatar, 
-  loader, 
+  spinner, 
   contentLoadingError, 
   profileAddBtn, 
   profileEditBtn, 
-  imagePopup,
+  profileImageBtn,
+  cardImagePopup,
   newCardPopup,
-  profilePopup,
-  profileForm,
+  profileTextPopup,
+  profileImagePopup,
+  profileTextForm,
+  profileImageForm,
   cardForm,
   userNameInput,
   userAboutInput,
+  avatarInput,
   cardUrlInput,
   cardPlaceNameInput 
 } 
@@ -29,24 +33,29 @@ const userName = document.querySelector('.profile__title');
 const userAbout = document.querySelector('.profile__description');
 const userAvatar = document.querySelector('.profile__image');
 
-const loader = document.querySelector('.loader');
+const spinner = document.querySelector('.spinner');
 const contentLoadingError = document.querySelector('.error');
 
 // кнопки
 const profileAddBtn = document.querySelector('.profile__add-button');
 const profileEditBtn = document.querySelector('.profile__edit-button');
+const profileImageBtn = document.querySelector('.profile__image-button');
 
 // попапы
-const imagePopup = document.querySelector('.popup_type_image');
+const cardImagePopup = document.querySelector('.popup_type_image');
 const newCardPopup = document.querySelector('.popup_type_new-card');
-const profilePopup = document.querySelector('.popup_type_edit');
+const profileTextPopup = document.querySelector('.popup_type_edit');
+const profileImagePopup = document.querySelector('.popup_type_avatar');
 
 // формы и инпуты
-const profileForm = document.forms['edit-profile'];
+const profileTextForm = document.forms['edit-profile'];
+const profileImageForm = document.forms['edit-avatar'];
 const cardForm = document.forms['new-place'];
 
-const userNameInput = profileForm.elements.name;
-const userAboutInput = profileForm.elements.description;
+const userNameInput = profileTextForm.elements.name;
+const userAboutInput = profileTextForm.elements.description;
+
+const avatarInput = profileImageForm.elements.link;
 
 const cardUrlInput = cardForm.elements.link;
 const cardPlaceNameInput = cardForm.elements['place-name'];

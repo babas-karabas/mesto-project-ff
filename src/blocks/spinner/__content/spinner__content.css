@@ -7,9 +7,9 @@
   }
 } 
 
-.loader__content {
-  width: 148px;
-  height: 148px;
+.spinner__content {
+  width: 48px;
+  height: 48px;
   border: 3px solid #FFF;
   border-bottom-color: transparent;
   border-radius: 50%;
@@ -19,8 +19,8 @@
   animation: rotation 1s linear infinite;
 }
  
-.loader__content::after {
-  content: '';  
+.spinner__content::after {
+  content: '';
   position: absolute;
   box-sizing: border-box;
   left: 20px;

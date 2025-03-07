@@ -7,6 +7,9 @@
   background-size: cover;
   background-position: center;
   margin: 0 29px 0 0;
+  position: relative;
+  z-index: 1;
+  display: flex;
 }
 
 @media screen and (max-width: 740px) {
@@ -20,3 +23,23 @@
     margin-right: 0;
   }
 }
+
+.profile__image:hover .profile__image-button {
+  opacity: 100%;
+}
+
+.profile__image::before {
+  content: '';
+  background-color: #000000cc;
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
+
+.profile__image:hover::before {
+  opacity: 100%;
+}
+

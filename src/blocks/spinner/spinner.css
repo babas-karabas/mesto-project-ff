@@ -1,0 +1,11 @@
+@import url('./__content/spinner__content.css');
+
+.spinner {
+  display: none;
+  place-items: center;
+  position: fixed;
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+}
