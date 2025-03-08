@@ -2,11 +2,11 @@
 import './pages/index.css';
 
 import { placesList, popupCaption, popupImage, userName, userAbout, userAvatar, spinner, contentLoadingError, 
-  profileAddBtn, profileEditBtn, profileImageBtn, cardImagePopup, newCardPopup, profileTextPopup, 
-  profileImagePopup, profileTextForm, profileImageForm, cardForm, userNameInput, userAboutInput, 
+  profileAddBtn, profileEditBtn, profileImageBtn, cardDeleteSubmitBtn, cardImagePopup, newCardPopup, profileTextPopup, 
+  profileImagePopup, cardDeletePopup, profileTextForm, profileImageForm, cardForm, userNameInput, userAboutInput, 
   avatarInput, cardUrlInput, cardPlaceNameInput } from './scripts/constants';
 import { getFromServer, patchToServer, postToServer, deleteFromServer, putToServer, dislikeApi, likeApi } from './scripts/api.js';
-import { makeCard, removeElement, handleLikeClick, removeCard } from './scripts/card';
+import { makeCard, removeElement, handleLikeClick } from './scripts/card';
 import { openModal, closeModal, attachEventListener } from './scripts/modal';
 import { renderError, renderSpinner, renderSaving } from './scripts/utilits';
 
@@ -47,16 +47,14 @@ const renderPage = () => {
   Promise.all([getFromServer('cards'), getFromServer('users/me')])
     .then(([cardsData, userData]) => {
        contentLoadingError.textContent = '';
-       cardsData.forEach(cardData => addСardToEnd(makeCard(cardData, removeCard(deleteFromServer, renderError, contentLoadingError), handleLikeClick(likeApi, dislikeApi), openCardImagePopup, userData._id), placesList));
+       cardsData.forEach(cardData => addСardToEnd(makeCard(cardData, openDeletePopup, handleLikeClick(likeApi, dislikeApi), openCardImagePopup, userData._id), placesList));
        renderProfile(userData);
     })
     .catch(err => {
       renderError(contentLoadingError, `Ошибка: ${err}`);
       renderProfile({});
     })
-    .finally(() => {
-      renderSpinner(spinner, false);
-    });
+    .finally(() => renderSpinner(spinner, false));
 }
  
 // функция редактирования текста профиля
@@ -68,9 +66,7 @@ const editProfileText = (evt) => {
     contentLoadingError.textContent = '';
     renderProfileText(data);
   })
-  .catch(err => {
-    renderError(contentLoadingError, `Ошибка: ${err}`);
-  })
+  .catch(err => renderError(contentLoadingError, `Ошибка: ${err}`))
   .finally(() => {
     renderSaving(evt.target, false);
     evt.target.reset();
@@ -87,9 +83,7 @@ const editAvatar = (evt) => {
     contentLoadingError.textContent = '';
     renderAvatar(data);
   })
-  .catch(err => {
-    renderError(contentLoadingError, `Ошибка: ${err}`);
-  })
+  .catch(err => renderError(contentLoadingError, `Ошибка: ${err}`))
   .finally(() => {
     renderSaving(evt.target, false);
     evt.target.reset();
@@ -104,11 +98,9 @@ const addCard = (evt) => {
   postToServer('cards', {name: cardPlaceNameInput.value, link: cardUrlInput.value})
   .then(data => {
     contentLoadingError.textContent = '';
-    addСardToTop(makeCard(data, removeCard(deleteFromServer, renderError, contentLoadingError), handleLikeClick(likeApi, dislikeApi), openCardImagePopup, data.owner._id), placesList);
+    addСardToTop(makeCard(data, openDeletePopup, handleLikeClick(likeApi, dislikeApi), openCardImagePopup, data.owner._id), placesList);
   })
-  .catch(err => {
-    renderError(contentLoadingError, `Ошибка: ${err}`);
-  })
+  .catch(err => renderError(contentLoadingError, `Ошибка: ${err}`))
   .finally(() => {
     renderSaving(evt.target, false);
     evt.target.reset();
@@ -122,6 +114,20 @@ const openCardImagePopup = (cardData) => {
   popupImage.src = cardData.link;
   popupCaption.textContent = cardData.name;
   popupImage.alt = cardData.name;
+}
+
+// функция удаления карточки 
+const handleRemoveCard = (cardData, cardElement) => {
+  deleteFromServer(`cards/${cardData._id}`)
+  .then(() => removeElement(cardElement))
+  .catch(err => renderError(contentLoadingError, `Ошибка: ${err}`))
+  .finally(() => closeModal(cardDeletePopup))
+}
+
+// функция открытия попапа подтверждения удаления карточки + навешиваем слушатель на кнопку подтверждения
+const openDeletePopup = (cardData, cardElement) => {
+  openModal(cardDeletePopup);
+  cardDeleteSubmitBtn.addEventListener('click', (evt) => handleRemoveCard(cardData, cardElement));
 }
 
 // слушатели

@@ -10,10 +10,12 @@ export {
   profileAddBtn, 
   profileEditBtn, 
   profileImageBtn,
+  cardDeleteSubmitBtn,
   cardImagePopup,
   newCardPopup,
   profileTextPopup,
   profileImagePopup,
+  cardDeletePopup,
   profileTextForm,
   profileImageForm,
   cardForm,
@@ -46,6 +48,7 @@ const cardImagePopup = document.querySelector('.popup_type_image');
 const newCardPopup = document.querySelector('.popup_type_new-card');
 const profileTextPopup = document.querySelector('.popup_type_edit');
 const profileImagePopup = document.querySelector('.popup_type_avatar');
+const cardDeletePopup = document.querySelector('.popup_type_delete-submit');
 
 // формы и инпуты
 const profileTextForm = document.forms['edit-profile'];
@@ -60,4 +63,5 @@ const avatarInput = profileImageForm.elements.link;
 const cardUrlInput = cardForm.elements.link;
 const cardPlaceNameInput = cardForm.elements['place-name'];
 
+const cardDeleteSubmitBtn = cardDeletePopup.querySelector('.popup__button');
 

@@ -1,5 +1,5 @@
 
-export const makeCard = (cardData, onDeleteCard, onLikeCard, onOpenImagePopup, myId) => {
+export const makeCard = (cardData, onOpenDeletePopup, onLikeCard, onOpenImagePopup, myId) => {
   const newCard = document.querySelector('#card-template').content.querySelector('.card').cloneNode(true);
   const deleteBtn = newCard.querySelector('.card__delete-button');
   const cardImage = newCard.querySelector('.card__image');
@@ -13,7 +13,7 @@ export const makeCard = (cardData, onDeleteCard, onLikeCard, onOpenImagePopup, m
   changeLikeCount(likeCounter, cardData);
   
   if (cardData.owner._id === myId) {
-    deleteBtn.addEventListener('click', () => onDeleteCard(cardData, newCard));
+    deleteBtn.addEventListener('click', () => onOpenDeletePopup(cardData, newCard));
   } else {
     removeElement(deleteBtn);
   }
@@ -61,16 +61,7 @@ export const handleLikeClick = (onLikeApi, onDislikeApi) => (cardData, isLiked) 
   }
 }
 
-// функция удаления карточки c сервера
-export const removeCard = (onDeleteApi, onRenderError, contentLoadingError) => (cardData, cardElement) => {
-  onDeleteApi(`cards/${cardData._id}`)
-  .then(() => {
-    removeElement(cardElement);
-  })
-  .catch(err => {
-    onRenderError(contentLoadingError, `Ошибка: ${err}`);
-  })
-}
+
 
 
 
