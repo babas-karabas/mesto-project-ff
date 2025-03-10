@@ -9,6 +9,7 @@ import { getFromServer, patchToServer, postToServer, deleteFromServer, putToServ
 import { makeCard, removeElement, handleLikeClick } from './scripts/card';
 import { openModal, closeModal, attachEventListener } from './scripts/modal';
 import { renderError, renderSpinner, renderSaving } from './scripts/utilits';
+import { enableValidation, clearValidation, validationConfig } from './scripts/validation.js';
 
 
 // объявление функций
@@ -104,6 +105,7 @@ const addCard = (evt) => {
   .finally(() => {
     renderSaving(evt.target, false);
     evt.target.reset();
+    clearValidation(cardForm, validationConfig); 
   });
   closeModal(newCardPopup);
 }
@@ -121,7 +123,10 @@ const handleRemoveCard = (cardData, cardElement) => {
   deleteFromServer(`cards/${cardData._id}`)
   .then(() => removeElement(cardElement))
   .catch(err => renderError(contentLoadingError, `Ошибка: ${err}`))
-  .finally(() => closeModal(cardDeletePopup))
+  .finally(() => {
+    closeModal(cardDeletePopup);
+    cardDeleteSubmitBtn.removeEventListener('click', (evt) => handleRemoveCard(cardData, cardElement));
+  })
 }
 
 // функция открытия попапа подтверждения удаления карточки + навешиваем слушатель на кнопку подтверждения
@@ -138,6 +143,7 @@ profileEditBtn.addEventListener('click', (evt) => {
   userNameInput.value = userName.textContent;
   userAboutInput.value = userAbout.textContent;
   openModal(profileTextPopup);
+  clearValidation(profileTextForm, validationConfig); 
 });
 
 //слушатель для открытия формы добавления новой картинки
@@ -165,6 +171,9 @@ cardForm.addEventListener('submit', addCard);
 
 // загружаем с сервера и отрисовываем карточки при обновлении страницы
 renderPage();
+
+// валидируем формы
+enableValidation(validationConfig);
 
 
 

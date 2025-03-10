@@ -46,18 +46,3 @@ export const dislikeApi = (cardId) => {
   return deleteFromServer(`cards/likes/${cardId}`);
 }
 
-/*export const validateImage = (imageUri) => {
-  return fetch(imageUri, {
-    method: 'HEAD',
-    headers: {
-    'X-Content-Type-Options': 'nosniff',
-    'Content-Type': 'application/json; charset=UTF-8'
-  }
-})
-  .then(res => {
-    if (res.ok) {
-      return res.json();
-    } 
-    return Promise.reject(res.status);
-    })
-};*/

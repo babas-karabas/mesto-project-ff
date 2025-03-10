@@ -1,0 +1,9 @@
+.popup__button_disabled {
+  color: black;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid black;
+  margin-top: 48px;
+  opacity: 20%;
+}

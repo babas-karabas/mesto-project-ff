@@ -1,5 +1,10 @@
 .error {
+  position: absolute;
+  inset-block-start: 100px;
+  inset-inline-start: 50%;
   color: red;
   font-size: x-large;
   font-weight: 900;
+  background-color: #fff;
 };
+
