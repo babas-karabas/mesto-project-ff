@@ -121,12 +121,12 @@ const openCardImagePopup = (cardData) => {
 // функция удаления карточки 
 const handleRemoveCard = (cardData, cardElement) => {
   deleteFromServer(`cards/${cardData._id}`)
-  .then(() => removeElement(cardElement))
-  .catch(err => renderError(contentLoadingError, `Ошибка: ${err}`))
-  .finally(() => {
+  .then(() => {
+    removeElement(cardElement);
     closeModal(cardDeletePopup);
     cardDeleteSubmitBtn.removeEventListener('click', (evt) => handleRemoveCard(cardData, cardElement));
-  })
+})
+  .catch(err => renderError(contentLoadingError, `Ошибка: ${err}`))
 }
 
 // функция открытия попапа подтверждения удаления карточки + навешиваем слушатель на кнопку подтверждения
