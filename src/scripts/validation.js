@@ -1,18 +1,7 @@
-export const validationConfig = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitBtnSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__error_visible'
-};
-
 export const enableValidation = ({formSelector, inputSelector, submitBtnSelector, inactiveButtonClass, inputErrorClass, errorClass}) => {
   const forms = document.querySelectorAll(formSelector);
-  const form = document.querySelector(formSelector);
   
   forms.forEach(form => {
-    form.addEventListener('submit', (evt) => evt.preventDefault());
     setEvtListeners(form, inputSelector, inputErrorClass, errorClass, submitBtnSelector, inactiveButtonClass);
   });
 }

@@ -23,7 +23,8 @@ export {
   userAboutInput,
   avatarInput,
   cardUrlInput,
-  cardPlaceNameInput 
+  cardPlaceNameInput,
+  validationConfig 
 } 
 
 // элементы
@@ -64,4 +65,15 @@ const cardUrlInput = cardForm.elements.link;
 const cardPlaceNameInput = cardForm.elements['place-name'];
 
 const cardDeleteSubmitBtn = cardDeletePopup.querySelector('.popup__button');
+
+// настройки валидации
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitBtnSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+};
+
 

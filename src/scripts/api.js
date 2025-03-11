@@ -1,7 +1,7 @@
-export const PATH = 'https://mesto.nomoreparties.co/v1/wff-cohort-33/';
-export const myToken = '70807b98-506a-49fd-a2c7-9ad6c06cb9a2';
+const PATH = 'https://mesto.nomoreparties.co/v1/wff-cohort-33/';
+const myToken = '70807b98-506a-49fd-a2c7-9ad6c06cb9a2';
 
-export const sendRequestToServer = (PATH, dataPath, myToken, method, data) => {
+const sendRequestToServer = (PATH, dataPath, myToken, method, data) => {
   return fetch(`${PATH}${dataPath}`, {
     method: method,
     body: JSON.stringify(data),
@@ -18,31 +18,40 @@ export const sendRequestToServer = (PATH, dataPath, myToken, method, data) => {
     })
 };
 
-export const getFromServer = (dataPath) => {
+
+const getFromServer = (dataPath) => {
   return sendRequestToServer(PATH, dataPath, myToken, 'GET');
 };
 
-export const postToServer = (dataPath, data) => {
+const postToServer = (dataPath, data) => {
   return sendRequestToServer(PATH, dataPath, myToken, 'POST', data);
 };
 
-export const patchToServer = (dataPath, data) => {
+const patchToServer = (dataPath, data) => {
   return sendRequestToServer(PATH, dataPath, myToken, 'PATCH', data);
 };
 
-export const deleteFromServer = (dataPath) => {
+const deleteFromServer = (dataPath) => {
   return sendRequestToServer(PATH, dataPath, myToken, 'DELETE');
 };
 
-export const putToServer = (dataPath) => {
+const putToServer = (dataPath) => {
   return sendRequestToServer(PATH, dataPath, myToken, 'PUT');
 }
 
-export const likeApi = (cardId) => {
-  return putToServer(`cards/likes/${cardId}`);
-}
+export const putLike = (cardId) => putToServer(`cards/likes/${cardId}`);
 
-export const dislikeApi = (cardId) => {
-  return deleteFromServer(`cards/likes/${cardId}`);
-}
+export const deleteLike = (cardId) => deleteFromServer(`cards/likes/${cardId}`);
+
+export const getCardsData = () => getFromServer('cards');
+
+export const getMyData = () => getFromServer('users/me');
+
+export const sendProfileInfo = (data) => patchToServer('users/me', data);
+
+export const sendAvatar = (data) => patchToServer('users/me/avatar', data);
+
+export const postCard = (data) => postToServer('cards', data);
+
+export const deleteCardFromServer = (cardId) => deleteFromServer(`cards/${cardId}`)
 

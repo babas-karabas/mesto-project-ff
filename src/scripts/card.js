@@ -1,5 +1,5 @@
 
-export const makeCard = (cardData, onOpenDeletePopup, onLikeCard, onOpenImagePopup, myId) => {
+export const makeCard = (cardData, onDeleteCard, onLikeCard, onOpenImagePopup, myId) => {
   const newCard = document.querySelector('#card-template').content.querySelector('.card').cloneNode(true);
   const deleteBtn = newCard.querySelector('.card__delete-button');
   const cardImage = newCard.querySelector('.card__image');
@@ -13,7 +13,7 @@ export const makeCard = (cardData, onOpenDeletePopup, onLikeCard, onOpenImagePop
   changeLikeCount(likeCounter, cardData);
   
   if (cardData.owner._id === myId) {
-    deleteBtn.addEventListener('click', () => onOpenDeletePopup(cardData, newCard));
+    deleteBtn.addEventListener('click', () => onDeleteCard(cardData, newCard));
   } else {
     removeElement(deleteBtn);
   }
@@ -23,14 +23,14 @@ export const makeCard = (cardData, onOpenDeletePopup, onLikeCard, onOpenImagePop
   }
 
   likeBtn.addEventListener('click', (evt) => {
-    togglelikeBtn(likeBtn);
     const isLiked = likeBtn.classList.contains('card__like-button_is-active');
 
     onLikeCard(cardData, isLiked)
     .then(data => {
+      togglelikeBtn(likeBtn)
       changeLikeCount(likeCounter, data);
     })
-    .catch(() => togglelikeBtn(likeBtn))
+    .catch(err => console.log(`Ошибка: ${err}`))
     });
 
   cardImage.addEventListener('click', () => onOpenImagePopup(cardData));
@@ -54,7 +54,7 @@ const changeLikeCount = (counterElement, cardData) => {
 // функция отправки лайка/дизлайка на сервер
 export const handleLikeClick = (onLikeApi, onDislikeApi) => (cardData, isLiked) => { 
 
-  if (isLiked) {
+  if (!isLiked) {
     return onLikeApi(cardData._id)
   } else {
     return onDislikeApi(cardData._id)
